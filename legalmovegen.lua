@@ -13,14 +13,21 @@ function checkLegality(board, whiteFrom, whiteTo, blackFrom, blackTo, eps, side)
 		whiteKingExists=false
 		blackKingExists=false
 		for i=1,movesForWhite,1 do --loop through the moves
+			tempBoard=board
 			tempBoard = board:sub(1,(whiteTo[i])-1) .. board:sub(whiteFrom[i],whiteFrom[i]) .. board:sub((whiteTo[i])+1,64)
 			tempBoard = tempBoard:sub(1,(whiteFrom[i])-1) ..".".. tempBoard:sub((whiteFrom[i])+1,64)
+			print(tempBoard .." | ".. string.len(tempBoard))
 			require("movegen")
 			moveGeneration(tempBoard, eps)
 			blackFromNew=generatedBlackFromSquares
 			blackToNew=generatedBlackToSquares
 			for _ in pairs(blackFromNew) do movesForBlack = movesForBlack + 1 end
+			print("woowoooooowow!")
 			for o=1,movesForBlack,1 do
+				print("WE AT LEAST WENT IN THE NEXT LOOP")
+				tempBoard=board
+				tempBoard = board:sub(1,(whiteTo[i])-1) .. board:sub(whiteFrom[i],whiteFrom[i]) .. board:sub((whiteTo[i])+1,64)
+				tempBoard = tempBoard:sub(1,(whiteFrom[i])-1) ..".".. tempBoard:sub((whiteFrom[i])+1,64)
 				tempBoard = tempBoard:sub(1,(blackToNew[o])-1) .. tempBoard:sub(blackFromNew[o],blackFromNew[o]) .. tempBoard:sub((blackToNew[o])+1,64)
 				tempBoard = tempBoard:sub(1,(blackFromNew[o])-1) ..".".. tempBoard:sub((blackFromNew[o])+1,64)
 				for p=1,64,1 do
@@ -54,7 +61,7 @@ function checkLegality(board, whiteFrom, whiteTo, blackFrom, blackTo, eps, side)
 			end
 			if whiteKingExists==true and blackKingExists==true then
 				table.insert(newBlackFrom,blackFrom[i]); table.insert(newBlackTo,blackTo[i])
-				print("move addded to black tables")
+				print("move added to black tables")
 			end
 		end
 	end

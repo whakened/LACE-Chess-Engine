@@ -22,6 +22,7 @@ function checkFile(tile) --check what file the specified tile is on
 	end
 end
 function checkRank(tile) --check what rank the specified tile is on
+	--print(b)
 	if tile>=1 and tile<=8 then
 		return "8"
 	elseif tile>=9 and tile<=16 then
@@ -67,7 +68,7 @@ function moveGeneration(board, enPassantSquare) --generate moves for white and b
 	generatedToSquaresBlack = {} --black's move table (squares the pieces move *to*)
 	totalMovesBlack = 0 --prepare how many psuedo-legal moves black has
 	--print(board)
-	local storedBoard = board --not needed due to realization that calling check functions didn't like local variables, but im too lazy to remove this
+	local storedBoard = board --not needed due to realization that board should work perfectly fine, but im too lazy to remove this
 	--print(storedBoard)
 	for i=1,64,1 do --loop through the whole board
 		if board:sub(i,i)=="P" then --if we find a white pawn, then [pawn logic]
@@ -431,15 +432,15 @@ function moveGeneration(board, enPassantSquare) --generate moves for white and b
 	--print(totalMovesWhite)
 	--print("succlsles")
 	require("legalmovegen")
-	checkLegality(board, generatedFromSquaresWhite, generatedToSquaresWhite, generatedFromSquaresBlack, generatedToSquaresBlack, enPassantSquare, w)
+	checkLegality(board, generatedFromSquaresWhite, generatedToSquaresWhite, generatedFromSquaresBlack, generatedToSquaresBlack, enPassantSquare, "w")
 	whiteFrom=newWhiteFrom
 	whiteTo=newWhiteTo
-	checkLegality(board, generatedFromSquaresWhite, generatedToSquaresWhite, generatedFromSquaresBlack, generatedToSquaresBlack, enPassantSquare, b)
+	checkLegality(board, generatedFromSquaresWhite, generatedToSquaresWhite, generatedFromSquaresBlack, generatedToSquaresBlack, enPassantSquare, "b")
 	blackFrom=newBlackFrom
 	blackTo=newBlackTo
 	totalMovesWhite=0
 	totalMovesBlack=0
 	for _ in pairs(whiteFrom) do totalMovesWhite = totalMovesWhite + 1 end --set how many legal moves white has
 	for _ in pairs(whiteTo) do totalMovesBlack = totalMovesBlack + 1 end --set how many legal moves black has
-	return whiteFrom,whiteTo,totalMovesWhite,blackFrom,blackTo,totalMovesBlack --return all our variables
+	return whiteFrom,whiteTo,totalMovesWhite,blackFrom,blackTo,totalMovesBlack,generatedFromSquaresWhite,generatedToSquaresWhite,generatedFromSquaresBlack,generatedToSquaresBlack --return all our variables
 end
