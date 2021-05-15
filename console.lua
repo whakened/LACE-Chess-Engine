@@ -35,20 +35,39 @@ function mainBody()
 		else print("Invalid command.") end
 	elseif cmd:sub(1,4)=="lace" then
 		if cmd:sub(6,13)=="evaluate" then
-			print("Evaluation does not yet exist with LACE.")
+			--print("Evaluation does not yet exist with LACE.")
+				require("movegen")
+				moveGeneration(board, enPassantSquare)
+				--print(totalMovesWhite .." possible moves detected for White.")
+				require("legalmovegen")
+				checkLegality(board, generatedFromSquaresWhite, generatedToSquaresWhite, generatedFromSquaresBlack, generatedToSquaresBlack, enPassantSquare, "w")
+				whiteFrom=newWhiteFrom
+				whiteTo=newWhiteTo
+				blackFrom=newBlackFrom
+				blackTo=newBlackTo
+				require("evaluation")
+				basicEvaluation(board, whiteFrom, blackFrom)
+				print("Evaluation of position: ".. score)
 		elseif cmd:sub(6,9)=="move" then
 			if cmd:sub(11,11)=="w" then
 				require("movegen")
 				moveGeneration(board, enPassantSquare)
-				print(totalMovesWhite .." possible moves detected for White.")
+				--print(totalMovesWhite .." possible moves detected for White.")
+				require("legalmovegen")
+				checkLegality(board, generatedFromSquaresWhite, generatedToSquaresWhite, generatedFromSquaresBlack, generatedToSquaresBlack, enPassantSquare, "w")
+				whiteFrom=newWhiteFrom
+				whiteTo=newWhiteTo
+				blackFrom=newBlackFrom
+				blackTo=newBlackTo
+				enPassantSquare=eps
 				math.randomseed(os.time())
 				math.random()
 				math.random()
 				local moveToMake = math.floor((1+(math.random()*totalMovesWhite))+0.5)
 				if moveToMake > totalMovesWhite then moveToMake = totalMovesWhite end
-				print(whiteFrom[moveToMake] .." goes to ".. whiteTo[moveToMake])
-				local tBoard = board:sub(1,(generatedToSquaresWhite[moveToMake])-1) .. board:sub(generatedFromSquaresWhite[moveToMake],generatedFromSquaresWhite[moveToMake]) .. board:sub((generatedToSquaresWhite[moveToMake])+1,64)
-				local tBoard = tBoard:sub(1,(generatedFromSquaresWhite[moveToMake])-1) ..".".. tBoard:sub((generatedFromSquaresWhite[moveToMake])+1,64)
+				--print(whiteFrom[moveToMake] .." goes to ".. whiteTo[moveToMake])
+				local tBoard = board:sub(1,(whiteTo[moveToMake])-1) .. board:sub(whiteFrom[moveToMake],whiteFrom[moveToMake]) .. board:sub((whiteTo[moveToMake])+1,64)
+				local tBoard = tBoard:sub(1,(whiteFrom[moveToMake])-1) ..".".. tBoard:sub((whiteFrom[moveToMake])+1,64)
 				board=tBoard
 			elseif cmd:sub(11,11)=="b" then
 				require("movegen")

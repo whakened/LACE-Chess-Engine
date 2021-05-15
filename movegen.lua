@@ -45,16 +45,16 @@ function checkRank(tile) --check what rank the specified tile is on
 end
 function checkSquare(b, tile) --check what type of piece is on the specified tile, requires board to check string
 	--print(b)
-	if b:sub(tile,tile)=="P" or b:sub(tile,tile)=="N" or b:sub(tile,tile)=="B" or b:sub(tile,tile)=="R" or b:sub(tile,tile)=="Q" then
+	if b:sub(tile,tile)=="P" or b:sub(tile,tile)=="N" or b:sub(tile,tile)=="B" or b:sub(tile,tile)=="R" or b:sub(tile,tile)=="Q" or b:sub(tile,tile)=="K" then
 		return "whitePiece"
-	elseif b:sub(tile,tile)=="p" or b:sub(tile,tile)=="n" or b:sub(tile,tile)=="b" or b:sub(tile,tile)=="r" or b:sub(tile,tile)=="q" then
+	elseif b:sub(tile,tile)=="p" or b:sub(tile,tile)=="n" or b:sub(tile,tile)=="b" or b:sub(tile,tile)=="r" or b:sub(tile,tile)=="q" or b:sub(tile,tile)=="k" then
 		return "blackPiece"
 	elseif b:sub(tile,tile)=="." then
 		return "emptySpace"
-	elseif b:sub(tile,tile)=="K" then
-		return "whiteKing"
-	elseif b:sub(tile,tile)=="k" then
-		return "blackKing"
+	--elseif b:sub(tile,tile)=="K" then               --commented, since we want the kings to be attackable to determine check
+	--	return "whiteKing"
+	--elseif b:sub(tile,tile)=="k" then
+	--	return "blackKing"
 	else
 		return "nilEntry"
 	end
@@ -102,7 +102,7 @@ function moveGeneration(board, enPassantSquare) --generate moves for white and b
 			end
 			if (checkSquare(storedBoard, i+E+E+S)=="emptySpace") or (checkSquare(storedBoard, i+E+E+S)=="blackPiece") then
 				if (checkRank(i)~="1") and (checkFile(i)~="g") and (checkFile(i)~="h") then
-					table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+N+N+E)
+					table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+E+E+S)
 				end
 			end
 			if (checkSquare(storedBoard, i+S+S+E)=="emptySpace") or (checkSquare(storedBoard, i+S+S+E)=="blackPiece") then
@@ -279,7 +279,7 @@ function moveGeneration(board, enPassantSquare) --generate moves for white and b
 			end
 			if (checkSquare(storedBoard, i+E+E+S)=="emptySpace") or (checkSquare(storedBoard, i+E+E+S)=="whitePiece") then
 				if (checkRank(i)~="1") and (checkFile(i)~="g") and (checkFile(i)~="h") then
-					table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+N+N+E)
+					table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+E+E+S)
 				end
 			end
 			if (checkSquare(storedBoard, i+S+S+E)=="emptySpace") or (checkSquare(storedBoard, i+S+S+E)=="whitePiece") then
@@ -431,16 +431,16 @@ function moveGeneration(board, enPassantSquare) --generate moves for white and b
 	for _ in pairs(generatedFromSquaresBlack) do totalMovesBlack = totalMovesBlack + 1 end --set how many psuedo-legal moves black has
 	--print(totalMovesWhite)
 	--print("succlsles")
-	require("legalmovegen")
-	checkLegality(board, generatedFromSquaresWhite, generatedToSquaresWhite, generatedFromSquaresBlack, generatedToSquaresBlack, enPassantSquare, "w")
-	whiteFrom=newWhiteFrom
-	whiteTo=newWhiteTo
-	checkLegality(board, generatedFromSquaresWhite, generatedToSquaresWhite, generatedFromSquaresBlack, generatedToSquaresBlack, enPassantSquare, "b")
-	blackFrom=newBlackFrom
-	blackTo=newBlackTo
-	totalMovesWhite=0
-	totalMovesBlack=0
-	for _ in pairs(whiteFrom) do totalMovesWhite = totalMovesWhite + 1 end --set how many legal moves white has
-	for _ in pairs(whiteTo) do totalMovesBlack = totalMovesBlack + 1 end --set how many legal moves black has
-	return whiteFrom,whiteTo,totalMovesWhite,blackFrom,blackTo,totalMovesBlack,generatedFromSquaresWhite,generatedToSquaresWhite,generatedFromSquaresBlack,generatedToSquaresBlack --return all our variables
+	--require("legalmovegen")
+	--checkLegality(board, generatedFromSquaresWhite, generatedToSquaresWhite, generatedFromSquaresBlack, generatedToSquaresBlack, enPassantSquare, "w")
+	--whiteFrom=newWhiteFrom
+	--whiteTo=newWhiteTo
+	--checkLegality(board, generatedFromSquaresWhite, generatedToSquaresWhite, generatedFromSquaresBlack, generatedToSquaresBlack, enPassantSquare, "b")
+	--blackFrom=newBlackFrom
+	--blackTo=newBlackTo
+	--totalMovesWhite=0
+	--totalMovesBlack=0
+	--for _ in pairs(whiteFrom) do totalMovesWhite = totalMovesWhite + 1 end --set how many legal moves white has
+	--for _ in pairs(whiteTo) do totalMovesBlack = totalMovesBlack + 1 end --set how many legal moves black has
+	return totalMovesWhite,totalMovesBlack,generatedFromSquaresWhite,generatedToSquaresWhite,generatedFromSquaresBlack,generatedToSquaresBlack --return all our variables
 end
