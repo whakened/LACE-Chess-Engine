@@ -13,12 +13,14 @@ function checkLegality(board, whiteFrom, whiteTo, blackFrom, blackTo, eps, side)
 		whiteKingExists=true
 		blackKingExists=true
 		for i=1,movesForWhite,1 do --loop through the moves
+			whiteKingExists=true
+			blackKingExists=true
 			tempBoard=board
 			tempBoard = board:sub(1,(whiteTo[i])-1) .. board:sub(whiteFrom[i],whiteFrom[i]) .. board:sub((whiteTo[i])+1,64)
 			tempBoard = tempBoard:sub(1,(whiteFrom[i])-1) ..".".. tempBoard:sub((whiteFrom[i])+1,64)
 			--print(tempBoard .." | ".. string.len(tempBoard))
 			require("movegen")
-			--print("woowoooooowow!")
+			print("woowoooooowow!")
 			moveGeneration(tempBoard, eps)
 			--print("woowoooooowow!")
 			blackFromNew=generatedFromSquaresBlack
@@ -39,7 +41,7 @@ function checkLegality(board, whiteFrom, whiteTo, blackFrom, blackTo, eps, side)
 			--print("we made it over here apparently")
 			if whiteKingExists==true and blackKingExists==true then
 				table.insert(newWhiteFrom,whiteFrom[i]); table.insert(newWhiteTo,whiteTo[i])
-				--print("move added to white tables")
+				print("move added to white tables")
 			end
 		end
 	elseif side=="b" then --if we are checking black's move legality

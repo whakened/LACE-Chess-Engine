@@ -47,7 +47,7 @@ function mainBody()
 				blackTo=newBlackTo
 				require("evaluation")
 				basicEvaluation(board, whiteFrom, blackFrom)
-				print("Evaluation of position: ".. score)
+				--print("Evaluation of position: ".. score)
 		elseif cmd:sub(6,9)=="move" then
 			if cmd:sub(11,11)=="w" then
 				require("movegen")

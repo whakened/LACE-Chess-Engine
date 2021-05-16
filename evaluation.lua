@@ -42,8 +42,16 @@ function basicEvaluation(board, whiteFrom, blackFrom)
 	end
 	for _ in pairs(whiteFrom) do wMobility = wMobility + 10 end
 	for _ in pairs(blackFrom) do bMobility = bMobility + 10 end
-	wScore = ((vK*wK)+(vQ*wQ)+(vR*wR)+(vB*wB)+(vN*wN)+(vP*wP)+wMobility)
-	bScore = ((vK*bK)+(vQ*bQ)+(vR*bR)+(vB*bB)+(vN*bN)+(vP*bP)+bMobility)
-	score = (wScore - bScore)/1000
+	--wScore = ((vK*wK)+(vQ*wQ)+(vR*wR)+(vB*wB)+(vN*wN)+(vP*wP)+wMobility)*(wK+wQ+wR+wB+wN+wP)
+	--bScore = ((vK*bK)+(vQ*bQ)+(vR*bR)+(vB*bB)+(vN*bN)+(vP*bP)+bMobility)*(bK+bQ+bR+bB+bN+bP)
+	--score = (wScore - bScore)/1000
+	materialScore = vK*(wK-bK)+vQ*(wQ-bQ)+vR*(wR-bR)+vK*(wN-bN)+vB*(wB-bB)+vP*(wP-bP)
+	score=(materialScore+(wMobility-bMobility))/1000
+	print("Type     | Evaluation")
+	print("-----------------")
+	print("Material | ".. materialScore/1000)
+	print("Mobility | ".. (wMobility-bMobility)/1000)
+	print("-----------------")
+	print("Total    | ".. score)
 	return score
 end
