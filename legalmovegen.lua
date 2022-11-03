@@ -18,21 +18,23 @@ function checkLegality(board, whiteFrom, whiteTo, blackFrom, blackTo, eps, side)
 			tempBoard=board
 			tempBoard = board:sub(1,(whiteTo[i])-1) .. board:sub(whiteFrom[i],whiteFrom[i]) .. board:sub((whiteTo[i])+1,64)
 			tempBoard = tempBoard:sub(1,(whiteFrom[i])-1) ..".".. tempBoard:sub((whiteFrom[i])+1,64)
+			--print(whiteFrom[i] .." | ".. whiteTo[i])
 			--print(tempBoard .." | ".. string.len(tempBoard))
 			require("movegen")
-			print("woowoooooowow!")
+			--print("woowoooooowow!")
 			moveGeneration(tempBoard, eps)
 			--print("woowoooooowow!")
 			blackFromNew=generatedFromSquaresBlack
 			blackToNew=generatedToSquaresBlack
 			movesForBlack = 0
 			for _ in pairs(blackFromNew) do movesForBlack = movesForBlack + 1 end
+			tempBoardB = tempBoard
 			for o=1,movesForBlack,1 do
 				--print("WE AT LEAST WENT IN THE NEXT LOOP")
 				--print(o)
-				tempBoard=board
-				tempBoard = board:sub(1,(whiteTo[i])-1) .. board:sub(whiteFrom[i],whiteFrom[i]) .. board:sub((whiteTo[i])+1,64)
-				tempBoard = tempBoard:sub(1,(whiteFrom[i])-1) ..".".. tempBoard:sub((whiteFrom[i])+1,64)
+				tempBoard = tempBoardB
+				if tempBoard:sub(blackToNew[o],blackToNew[o])=="K" then print(blackFromNew[o] .." | ".. blackToNew[o]) end
+				if tempBoard:sub(blackToNew[o],blackToNew[o])=="k" then print(blackFromNew[o] .." | ".. blackToNew[o]) end
 				tempBoard = tempBoard:sub(1,(blackToNew[o])-1) .. tempBoard:sub(blackFromNew[o],blackFromNew[o]) .. tempBoard:sub((blackToNew[o])+1,64)
 				tempBoard = tempBoard:sub(1,(blackFromNew[o])-1) ..".".. tempBoard:sub((blackFromNew[o])+1,64)
 				if string.find(tempBoard, "K")==nil then whiteKingExists=false end
@@ -41,27 +43,34 @@ function checkLegality(board, whiteFrom, whiteTo, blackFrom, blackTo, eps, side)
 			--print("we made it over here apparently")
 			if whiteKingExists==true and blackKingExists==true then
 				table.insert(newWhiteFrom,whiteFrom[i]); table.insert(newWhiteTo,whiteTo[i])
-				print("move added to white tables")
+				--print("move added to white tables")
 			end
 		end
 	elseif side=="b" then --if we are checking black's move legality
 		whiteKingExists=true
 		blackKingExists=true
-		for i=1,movesFoBlack,1 do --loop through the moves
+		--print(movesForBlack)
+		for i=1,movesForBlack,1 do --loop through the moves
+			--print("okay uh move. did is ".. i .."/".. movesForBlack)
+			whiteKingExists=true
+			blackKingExists=true
 			tempBoard = board:sub(1,(blackTo[i])-1) .. board:sub(blackFrom[i],blackFrom[i]) .. board:sub((blackTo[i])+1,64)
 			tempBoard = tempBoard:sub(1,(blackFrom[i])-1) ..".".. tempBoard:sub((blackFrom[i])+1,64)
 			require("movegen")
 			moveGeneration(tempBoard, eps)
 			whiteFromNew=generatedFromSquaresWhite
 			whiteToNew=generatedToSquaresWhite
-			for _ in pairs(blackFromNew) do movesForBlack = movesForBlack + 1 end
-			for o=1,movesForBlack,1 do
+			movesForWhite=0
+			for _ in pairs(whiteFromNew) do movesForWhite = movesForWhite + 1 end
+			for o=1,movesForWhite,1 do
+				--print(whiteToNew[o])
+				tempBoard = board
+				tempBoard = board:sub(1,(blackTo[i])-1) .. board:sub(blackFrom[i],blackFrom[i]) .. board:sub((blackTo[i])+1,64)
+				tempBoard = tempBoard:sub(1,(blackFrom[i])-1) ..".".. tempBoard:sub((blackFrom[i])+1,64)
 				tempBoard = tempBoard:sub(1,(whiteToNew[o])-1) .. tempBoard:sub(whiteFromNew[o],whiteFromNew[o]) .. tempBoard:sub((whiteToNew[o])+1,64)
 				tempBoard = tempBoard:sub(1,(whiteFromNew[o])-1) ..".".. tempBoard:sub((whiteFromNew[o])+1,64)
-				if string.find(tempBoard, "K") then
-				else whiteKingExists=false end
-				if string.find(tempBoard, "k") then
-				else blackKingExists=false end
+				if string.find(tempBoard, "K")==nil then whiteKingExists=false end
+				if string.find(tempBoard, "k")==nil then blackKingExists=false end
 			end
 			if whiteKingExists==true and blackKingExists==true then
 				table.insert(newBlackFrom,blackFrom[i]); table.insert(newBlackTo,blackTo[i])
@@ -70,5 +79,48 @@ function checkLegality(board, whiteFrom, whiteTo, blackFrom, blackTo, eps, side)
 		end
 	end
 	--print("returning vars")
+	--print(whiteFrom[1])
 	return newWhiteFrom,newWhiteTo,newBlackFrom,newBlackTo,eps
+end
+function isCheckmate(board, eps, side)
+	isMate=false
+	totalMovesWhite=0
+	totalMovesBlack=0
+	whiteKingExists=true
+	blackKingExists=true
+	if side=="b" then
+		require("movegen")
+		moveGeneration(board, eps)
+		blackFrom=generatedFromSquaresBlack
+		blackTo=generatedToSquaresBlack
+		--for _ in pairs(blackFrom) do totalMovesBlack=totalMovesBlack+1 end
+		--print(totalMovesBlack)
+		for i=1,totalMovesBlack,1 do
+			--print(i)
+			tempBoard = board
+			tempBoard = board:sub(1,(blackTo[i])-1) .. board:sub(blackFrom[i],blackFrom[i]) .. board:sub((blackTo[i])+1,64)
+			tempBoard = tempBoard:sub(1,(blackFrom[i])-1) ..".".. tempBoard:sub((blackFrom[i])+1,64)
+			if string.find(tempBoard, "K")==nil then whiteKingExists=false end
+			if string.find(tempBoard, "k")==nil then blackKingExists=false end
+		end
+		if whiteKingExists==false and blackKingExists==true then
+			isMate = true
+		end
+	elseif side=="w" then
+		require("movegen")
+		moveGeneration(board, eps)
+		whiteFrom=generatedFromSquaresWhite
+		whiteTo=generatedToSquaresWhite
+		for i=1,totalMovesWhite,1 do
+			tempBoard = board
+			tempBoard = board:sub(1,(whiteTo[i])-1) .. board:sub(whiteFrom[i],whiteFrom[i]) .. board:sub((whiteTo[i])+1,64)
+			tempBoard = tempBoard:sub(1,(whiteFrom[i])-1) ..".".. tempBoard:sub((whiteFrom[i])+1,64)
+			if string.find(tempBoard, "K")==nil then whiteKingExists=false end
+			if string.find(tempBoard, "k")==nil then blackKingExists=false end
+		end
+		if whiteKingExists==true and blackKingExists==false then
+			isMate = true
+		end
+	end
+	return isMate
 end

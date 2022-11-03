@@ -224,29 +224,29 @@ function moveGeneration(board, enPassantSquare) --generate moves for white and b
 				tileDo=tileDo+W
 			end
 		elseif board:sub(i,i)=="K" then --if its a white king
-			if (checkSquare(storedBoard, i+N)=="emptySpace") or (checkSquare(storedBoard, i+N)=="blackPiece") and (checkRank(i)~="8") then --all the rook and bishop moves but one time
-				table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+N)
+			if (checkSquare(storedBoard, i+N)=="emptySpace") or (checkSquare(storedBoard, i+N)=="blackPiece") then --all the rook and bishop moves but one time
+				if (checkRank(i)~="8") then table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+N) end --if statement has to go in here otherwise it breaks and the king can move from a1 to h1 or a4 to h6. so yeah
 			end
-			if (checkSquare(storedBoard, i+N+E)=="emptySpace") or (checkSquare(storedBoard, i+N+E)=="blackPiece") and (checkRank(i)~="8") and (checkFile(i)~="h") then
-				table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+N+E)
+			if (checkSquare(storedBoard, i+N+E)=="emptySpace") or (checkSquare(storedBoard, i+N+E)=="blackPiece") then
+				if (checkRank(i)~="8") and (checkFile(i)~="h") then table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+N+E) end
 			end
-			if (checkSquare(storedBoard, i+E)=="emptySpace") or (checkSquare(storedBoard, i+E)=="blackPiece") and (checkFile(i)~="h") then
-				table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+E)
+			if (checkSquare(storedBoard, i+E)=="emptySpace") or (checkSquare(storedBoard, i+E)=="blackPiece") then
+				if (checkFile(i)~="h") then table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+E) end
 			end
-			if (checkSquare(storedBoard, i+E+S)=="emptySpace") or (checkSquare(storedBoard, i+E+S)=="blackPiece") and (checkRank(i)~="1") and (checkFile(i)~="h") then
-				table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+E+S)
+			if (checkSquare(storedBoard, i+E+S)=="emptySpace") or (checkSquare(storedBoard, i+E+S)=="blackPiece") then
+				if (checkRank(i)~="1") and (checkFile(i)~="h") then table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+E+S) end
 			end
-			if (checkSquare(storedBoard, i+S)=="emptySpace") or (checkSquare(storedBoard, i+S)=="blackPiece") and (checkRank(i)~="1") then
-				table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+S)
+			if (checkSquare(storedBoard, i+S)=="emptySpace") or (checkSquare(storedBoard, i+S)=="blackPiece") then
+				if (checkRank(i)~="1") then table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+S) end
 			end
-			if (checkSquare(storedBoard, i+S+W)=="emptySpace") or (checkSquare(storedBoard, i+S+W)=="blackPiece")and (checkRank(i)~="1") and (checkFile(i)~="a") then
-				table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+S+W)
+			if (checkSquare(storedBoard, i+S+W)=="emptySpace") or (checkSquare(storedBoard, i+S+W)=="blackPiece") then
+				if (checkRank(i)~="1") and (checkFile(i)~="a") then table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+S+W) end
 			end
-			if (checkSquare(storedBoard, i+W)=="emptySpace") or (checkSquare(storedBoard, i+W)=="blackPiece") and (checkFile(i)~="a") then
-				table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+W)
+			if (checkSquare(storedBoard, i+W)=="emptySpace") or (checkSquare(storedBoard, i+W)=="blackPiece") then
+				if (checkFile(i)~="a") then table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+W) end
 			end
-			if (checkSquare(storedBoard, i+W+N)=="emptySpace") or (checkSquare(storedBoard, i+W+N)=="blackPiece") and (checkRank(i)~="8") and (checkFile(i)~="a") then
-				table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+W+N)
+			if (checkSquare(storedBoard, i+W+N)=="emptySpace") or (checkSquare(storedBoard, i+W+N)=="blackPiece") then
+				if (checkRank(i)~="8") and (checkFile(i)~="a") then table.insert(generatedFromSquaresWhite,i); table.insert(generatedToSquaresWhite,i+W+N) end
 			end
 		elseif board:sub(i,i)=="p" then --same stuff as before just for the black pieces
 			if (checkSquare(storedBoard, i+S)=="emptySpace") and (checkRank(i)~="1") then
@@ -401,29 +401,29 @@ function moveGeneration(board, enPassantSquare) --generate moves for white and b
 				tileDo=tileDo+W
 			end
 		elseif board:sub(i,i)=="k" then
-			if (checkSquare(storedBoard, i+N)=="emptySpace") or (checkSquare(storedBoard, i+N)=="whitePiece") and (checkRank(i)~="8") then
-				table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+N)
+			if (checkSquare(storedBoard, i+N)=="emptySpace") or (checkSquare(storedBoard, i+N)=="whitePiece") then
+				if (checkRank(i)~="8") then table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+N) end
 			end
-			if (checkSquare(storedBoard, i+N+E)=="emptySpace") or (checkSquare(storedBoard, i+N+E)=="whitePiece") and (checkRank(i)~="8") and (checkFile(i)~="h") then
-				table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+N+E)
+			if (checkSquare(storedBoard, i+N+E)=="emptySpace") or (checkSquare(storedBoard, i+N+E)=="whitePiece") then
+				if (checkRank(i)~="8") and (checkFile(i)~="h") then table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+N+E) end
 			end
-			if (checkSquare(storedBoard, i+E)=="emptySpace") or (checkSquare(storedBoard, i+E)=="whitePiece") and (checkFile(i)~="h") then
-				table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+E)
+			if (checkSquare(storedBoard, i+E)=="emptySpace") or (checkSquare(storedBoard, i+E)=="whitePiece") then
+				if (checkFile(i)~="h") then table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+E) end
 			end
-			if (checkSquare(storedBoard, i+E+S)=="emptySpace") or (checkSquare(storedBoard, i+E+S)=="whitePiece") and (checkRank(i)~="1") and (checkFile(i)~="h") then
-				table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+E+S)
+			if (checkSquare(storedBoard, i+E+S)=="emptySpace") or (checkSquare(storedBoard, i+E+S)=="whitePiece") then
+				if (checkRank(i)~="1") and (checkFile(i)~="h") then table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+E+S) end
 			end
-			if (checkSquare(storedBoard, i+S)=="emptySpace") or (checkSquare(storedBoard, i+S)=="whitePiece") and (checkRank(i)~="1") then
-				table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+S)
+			if (checkSquare(storedBoard, i+S)=="emptySpace") or (checkSquare(storedBoard, i+S)=="whitePiece") then
+				if (checkRank(i)~="1") then table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+S) end
 			end
-			if (checkSquare(storedBoard, i+S+W)=="emptySpace") or (checkSquare(storedBoard, i+S+W)=="whitePiece")and (checkRank(i)~="1") and (checkFile(i)~="a") then
-				table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+S+W)
+			if (checkSquare(storedBoard, i+S+W)=="emptySpace") or (checkSquare(storedBoard, i+S+W)=="whitePiece") then
+				if (checkRank(i)~="1") and (checkFile(i)~="a") then table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+S+W) end
 			end
-			if (checkSquare(storedBoard, i+W)=="emptySpace") or (checkSquare(storedBoard, i+W)=="whitePiece") and (checkFile(i)~="a") then
-				table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+W)
+			if (checkSquare(storedBoard, i+W)=="emptySpace") or (checkSquare(storedBoard, i+W)=="whitePiece") then
+				if (checkFile(i)~="a") then table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+W) end
 			end
-			if (checkSquare(storedBoard, i+W+N)=="emptySpace") or (checkSquare(storedBoard, i+W+N)=="whitePiece") and (checkRank(i)~="8") and (checkFile(i)~="a") then
-				table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+W+N)
+			if (checkSquare(storedBoard, i+W+N)=="emptySpace") or (checkSquare(storedBoard, i+W+N)=="whitePiece") then
+				if (checkRank(i)~="8") and (checkFile(i)~="a") then table.insert(generatedFromSquaresBlack,i); table.insert(generatedToSquaresBlack,i+W+N) end
 			end
 		end
 	end

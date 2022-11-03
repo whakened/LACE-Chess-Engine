@@ -1,16 +1,22 @@
 function displayBoard(b)
 	print("+---+---+---+---+---+---+---+---+")
+	sideNumber = 8
 	for i=1,57,8 do
-		print("| ".. b:sub(i,i) .." | ".. b:sub(i+1,i+1) .." | ".. b:sub(i+2,i+2) .." | ".. b:sub(i+3,i+3) .." | ".. b:sub(i+4,i+4) .." | ".. b:sub(i+5,i+5) .." | ".. b:sub(i+6,i+6) .." | ".. b:sub(i+7,i+7) .." |")
+		print("| ".. b:sub(i,i) .." | ".. b:sub(i+1,i+1) .." | ".. b:sub(i+2,i+2) .." | ".. b:sub(i+3,i+3) .." | ".. b:sub(i+4,i+4) .." | ".. b:sub(i+5,i+5) .." | ".. b:sub(i+6,i+6) .." | ".. b:sub(i+7,i+7) .." | ".. sideNumber)
 		print("+---+---+---+---+---+---+---+---+")
+		sideNumber=sideNumber-1
 	end
+	print("  a   b   c   d   e   f   g   h")
 end
 function displayBoardAsBlack(b)
 	print("+---+---+---+---+---+---+---+---+")
+	sideNumber = 1
 	for i=64,8,-8 do
-		print("| ".. b:sub(i,i) .." | ".. b:sub(i-1,i-1) .." | ".. b:sub(i-2,i-2) .." | ".. b:sub(i-3,i-3) .." | ".. b:sub(i-4,i-4) .." | ".. b:sub(i-5,i-5) .." | ".. b:sub(i-6,i-6) .." | ".. b:sub(i-7,i-7) .." |")
+		print("| ".. b:sub(i,i) .." | ".. b:sub(i-1,i-1) .." | ".. b:sub(i-2,i-2) .." | ".. b:sub(i-3,i-3) .." | ".. b:sub(i-4,i-4) .." | ".. b:sub(i-5,i-5) .." | ".. b:sub(i-6,i-6) .." | ".. b:sub(i-7,i-7) .." | ".. sideNumber)
 		print("+---+---+---+---+---+---+---+---+")
+		sideNumber=sideNumber+1
 	end
+	print("  h   g   f   e   d   c   b   a")
 end
 function moveInterpret(move)
 	coordA=move:sub(1,2)

@@ -3,7 +3,7 @@ local board = "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
 local startpos = board
 enPassantSquare = 0
 castlingRights = {true,true,true,true} --white O-O, white O-O-O, black O-O, black O-O-O
-print('LACE (Lua Alternative Chess Engine) 0.0.1alpha | Developed by WhakeNeD')
+print('LACE (Lua Alternative Chess Engine) 0.0.1alpha | Developed by You And Also You')
 print("Enter 'Help' for a list of commands")
 print("")
 function mainBody()
@@ -59,29 +59,65 @@ function mainBody()
 				whiteTo=newWhiteTo
 				blackFrom=newBlackFrom
 				blackTo=newBlackTo
+				totalMovesWhite,totalMovesBlack=0,0
+				for _ in pairs(whiteFrom) do totalMovesWhite=totalMovesWhite+1 end
+				for _ in pairs(blackFrom) do totalMovesBlack=totalMovesBlack+1 end
 				enPassantSquare=eps
-				math.randomseed(os.time())
-				math.random()
-				math.random()
-				local moveToMake = math.floor((1+(math.random()*totalMovesWhite))+0.5)
-				if moveToMake > totalMovesWhite then moveToMake = totalMovesWhite end
-				--print(whiteFrom[moveToMake] .." goes to ".. whiteTo[moveToMake])
-				local tBoard = board:sub(1,(whiteTo[moveToMake])-1) .. board:sub(whiteFrom[moveToMake],whiteFrom[moveToMake]) .. board:sub((whiteTo[moveToMake])+1,64)
-				local tBoard = tBoard:sub(1,(whiteFrom[moveToMake])-1) ..".".. tBoard:sub((whiteFrom[moveToMake])+1,64)
-				board=tBoard
+				--print(whiteFrom[1])
+				if totalMovesWhite==0 then
+					require("legalmovegen")
+					isCheckmate(board, enPassantSquare, "w")
+					if isMate==true then print("Game over! Checkmate.")
+					elseif isMate==false then print("Game over! Stalemate.") end
+				else
+					require("evaluation")
+					evaluatePosition(board, enPassantSquare, 1, 1024, whiteFrom, whiteTo, blackFrom, blackTo)
+					local tBoard = board:sub(1,(whiteTo[bestMove])-1) .. board:sub(whiteFrom[bestMove],whiteFrom[bestMove]) .. board:sub((whiteTo[bestMove])+1,64)
+					local tBoard = tBoard:sub(1,(whiteFrom[bestMove])-1) ..".".. tBoard:sub((whiteFrom[bestMove])+1,64)
+					board=tBoard
+					--math.randomseed(os.time())
+					--math.random()
+					--math.random()
+					--local moveToMake = math.floor((1+(math.random()*totalMovesWhite))+0.5)
+					--if moveToMake > totalMovesWhite then moveToMake = totalMovesWhite end
+					--print(moveToMake)
+					--print(whiteFrom[moveToMake] .." goes to ".. whiteTo[moveToMake])
+					--local tBoard = board:sub(1,(whiteTo[moveToMake])-1) .. board:sub(whiteFrom[moveToMake],whiteFrom[moveToMake]) .. board:sub((whiteTo[moveToMake])+1,64)
+					--local tBoard = tBoard:sub(1,(whiteFrom[moveToMake])-1) ..".".. tBoard:sub((whiteFrom[moveToMake])+1,64)
+					--board=tBoard
+				end
 			elseif cmd:sub(11,11)=="b" then
 				require("movegen")
-				moveGeneration(board)
-				print(totalMovesBlack .." possible moves detected for Black.")
-				math.randomseed(os.time())
-				math.random()
-				math.random()
-				local moveToMake = math.floor((1+(math.random()*totalMovesBlack))+0.5)
-				if moveToMake > totalMovesBlack then moveToMake = totalMovesBlack end
-				print(generatedFromSquaresBlack[moveToMake] .." goes to ".. generatedToSquaresBlack[moveToMake])
-				local tBoard = board:sub(1,(generatedToSquaresBlack[moveToMake])-1) .. board:sub(generatedFromSquaresBlack[moveToMake],generatedFromSquaresBlack[moveToMake]) .. board:sub((generatedToSquaresBlack[moveToMake])+1,64)
-				local tBoard = tBoard:sub(1,(generatedFromSquaresBlack[moveToMake])-1) ..".".. tBoard:sub((generatedFromSquaresBlack[moveToMake])+1,64)
-				board=tBoard
+				moveGeneration(board, enPassantSquare)
+				--print(totalMovesBlack .." possible moves detected for Black.")
+				require("legalmovegen")
+				checkLegality(board, generatedFromSquaresWhite, generatedToSquaresWhite, generatedFromSquaresBlack, generatedToSquaresBlack, enPassantSquare, "b")
+				whiteFrom=newWhiteFrom
+				whiteTo=newWhiteTo
+				blackFrom=newBlackFrom
+				blackTo=newBlackTo
+				totalMovesWhite,totalMovesBlack=0,0
+				for _ in pairs(whiteFrom) do totalMovesWhite=totalMovesWhite+1 end
+				for _ in pairs(blackFrom) do totalMovesBlack=totalMovesBlack+1 end
+				enPassantSquare=eps
+				--print(blackFrom[1])
+				if totalMovesBlack==0 then
+					require("legalmovegen")
+					isCheckmate(board, enPassantSquare, "b")
+					if isMate==true then print("Game over! Checkmate.")
+					elseif isMate==false then print("Game over! Stalemate.") end
+				else
+					math.randomseed(os.time())
+					math.random()
+					math.random()
+					local moveToMake = math.floor((1+(math.random()*totalMovesBlack))+0.5)
+					if moveToMake > totalMovesBlack then moveToMake = totalMovesBlack end
+					--print(moveToMake)
+					--print(blackFrom[moveToMake] .." goes to ".. blackTo[moveToMake])
+					local tBoard = board:sub(1,(blackTo[moveToMake])-1) .. board:sub(blackFrom[moveToMake],blackFrom[moveToMake]) .. board:sub((blackTo[moveToMake])+1,64)
+					local tBoard = tBoard:sub(1,(blackFrom[moveToMake])-1) ..".".. tBoard:sub((blackFrom[moveToMake])+1,64)
+					board=tBoard
+				end
 			else print("Invalid command.") end
 		else print("Invalid command.") end
 	elseif cmd=="exit" then os.exit()
